@@ -1,21 +1,34 @@
-/* ===== CSS library for Book Lending Tracker =====
-   All styling for the page comes from this file only. */
+/* ===== CSS library =====
+   Generic, reusable classes. Nothing here is specific to one page or project.
+   The HTML is styled only with these classes (no inline styles, no other stylesheet).
+
+   Contents:
+     Base          colors, reset, body
+     Layout        .header  .container  .footer  .stats  .stat
+     Card          .card  .card-title
+     Forms         .form-group  .form-label  .form-control  .is-invalid  .form-error
+     Buttons       .btn  .btn-primary  .btn-success  .btn-danger  .btn-sm
+     Table         .table-responsive  .table
+     Badges        .badge  .badge-success  .badge-danger  .badge-muted
+     Utilities     .text-center  .text-muted  .text-danger  .hidden
+*/
+
+/*base*/
 
 :root {
     --color-primary: #2f5d8a;
     --color-primary-dark: #244a6e;
     --color-background: #f3f5f8;
-    --color-card: #ffffff;
+    --color-surface: #ffffff;
     --color-text: #1f2933;
     --color-muted: #6b7785;
     --color-border: #d5dbe3;
-    --color-error: #c0392b;
-    --color-ok: #2e7d32;
-    --color-ok-bg: #e3f3e4;
-    --color-late: #c0392b;
-    --color-late-bg: #fbe4e1;
-    --color-done: #5f6b7a;
-    --color-done-bg: #e8ebef;
+    --color-success: #2e7d32;
+    --color-success-light: #e3f3e4;
+    --color-danger: #c0392b;
+    --color-danger-light: #fbe4e1;
+    --color-neutral: #5f6b7a;
+    --color-neutral-light: #e8ebef;
 }
 
 * {
@@ -30,20 +43,20 @@ body {
     line-height: 1.5;
 }
 
-/* ----- layout ----- */
+/*layout*/
 
-.site-header {
+.header {
     background-color: var(--color-primary);
     color: #ffffff;
     padding: 24px 16px;
     text-align: center;
 }
 
-.site-header h1 {
+.header h1 {
     margin: 0 0 4px 0;
 }
 
-.site-header p {
+.header p {
     margin: 0;
 }
 
@@ -53,164 +66,21 @@ body {
     padding: 0 16px;
 }
 
-.card {
-    background-color: var(--color-card);
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 24px;
-}
-
-.card h2 {
-    margin-top: 0;
-}
-
-.site-footer {
-    text-align: center;
+.footer {
     padding: 16px;
-    color: var(--color-muted);
 }
 
-.site-footer p {
+.footer p {
     margin: 0;
 }
 
-/* ----- form ----- */
-
-.form-group {
-    margin-bottom: 14px;
-}
-
-.form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 4px;
-}
-
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 8px 10px;
-    font-size: 1rem;
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-}
-
-/* ----- buttons ----- */
-
-.btn {
-    padding: 8px 14px;
-    font-size: 0.95rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.btn-primary {
-    background-color: var(--color-primary);
-    color: #ffffff;
-}
-
-.btn-primary:hover {
-    background-color: var(--color-primary-dark);
-}
-
-/* ----- validation messages ----- */
-
-.form-group input.invalid,
-.form-group select.invalid {
-    border-color: var(--color-error);
-}
-
-.error {
-    display: block;
-    min-height: 18px;
-    margin-top: 2px;
-    font-size: 0.85rem;
-    color: var(--color-error);
-}
-
-/* ----- table ----- */
-
-.btn-small {
-    padding: 4px 10px;
-    font-size: 0.85rem;
-    margin-right: 6px;
-}
-
-.btn-return {
-    background-color: var(--color-ok);
-    color: #ffffff;
-}
-
-.btn-delete {
-    background-color: var(--color-late);
-    color: #ffffff;
-}
-
-.table-wrapper {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th,
-td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid var(--color-border);
-    white-space: nowrap;
-}
-
-th {
-    background-color: var(--color-background);
-}
-
-.status {
-    display: inline-block;
-    padding: 2px 10px;
-    border-radius: 12px;
-    font-size: 0.85rem;
-    font-weight: bold;
-}
-
-.status-lent {
-    background-color: var(--color-ok-bg);
-    color: var(--color-ok);
-}
-
-.status-overdue {
-    background-color: var(--color-late-bg);
-    color: var(--color-late);
-}
-
-.status-returned {
-    background-color: var(--color-done-bg);
-    color: var(--color-done);
-}
-
-.empty-message {
-    text-align: center;
-    color: var(--color-muted);
-    margin: 16px 0 0 0;
-}
-
-.hidden {
-    display: none;
-}
-
-/* ----- summary ----- */
-
-.summary {
+.stats {
     display: flex;
     gap: 16px;
     margin-bottom: 16px;
 }
 
-.summary-box {
+.stat {
     flex: 1;
     background-color: var(--color-background);
     border: 1px solid var(--color-border);
@@ -219,24 +89,167 @@ th {
     text-align: center;
 }
 
-.summary-label {
+.stat-label {
     display: block;
     color: var(--color-muted);
     font-size: 0.9rem;
 }
 
-.summary-value {
+.stat-value {
     display: block;
     font-size: 1.8rem;
     font-weight: bold;
 }
 
-.summary-overdue {
-    color: var(--color-late);
+/*card*/
+
+.card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
 }
 
+.card-title {
+    margin-top: 0;
+}
+
+/*forms */
+
+.form-group {
+    margin-bottom: 14px;
+}
+
+.form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+}
+
+.form-control.is-invalid {
+    border-color: var(--color-danger);
+}
+
+.form-error {
+    display: block;
+    min-height: 18px;
+    margin-top: 2px;
+    font-size: 0.85rem;
+    color: var(--color-danger);
+}
+
+/*buttons*/
+
+.btn {
+    padding: 8px 14px;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #ffffff;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-dark);
+}
+
+.btn-success {
+    background-color: var(--color-success);
+}
+
+.btn-danger {
+    background-color: var(--color-danger);
+}
+
+.btn-sm {
+    padding: 4px 10px;
+    font-size: 0.85rem;
+    margin-right: 6px;
+}
+
+/*table*/
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+}
+
+.table th {
+    background-color: var(--color-background);
+}
+
+/*badges*/
+
+.badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.badge-success {
+    background-color: var(--color-success-light);
+    color: var(--color-success);
+}
+
+.badge-danger {
+    background-color: var(--color-danger-light);
+    color: var(--color-danger);
+}
+
+.badge-muted {
+    background-color: var(--color-neutral-light);
+    color: var(--color-neutral);
+}
+
+/*utilities*/
+
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: var(--color-muted);
+}
+
+.text-danger {
+    color: var(--color-danger);
+}
+
+.hidden {
+    display: none;
+}
+
+/*small screens*/
+
 @media (max-width: 600px) {
-    .summary {
+    .stats {
         flex-direction: column;
     }
 }

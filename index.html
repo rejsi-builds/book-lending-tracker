@@ -10,7 +10,7 @@
 
 <body>
 
-    <header class="site-header">
+    <header class="header">
         <h1>Book Lending Tracker</h1>
         <p>Keep track of the books you lent, to whom, and when they are due.</p>
     </header>
@@ -18,44 +18,42 @@
     <main class="container">
 
         <section class="card">
-            <h2>Lend a book</h2>
-
+            <h2 class="card-title">Lend a book</h2>
             <form id="lend-form" novalidate>
-
                 <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" id="title" name="title" required>
-                    <span class="error" id="title-error"></span>
+                    <label class="form-label" for="title">Title</label>
+                    <input class="form-control" type="text" id="title" name="title" required>
+                    <span class="form-error" id="title-error"></span>
                 </div>
 
                 <div class="form-group">
-                    <label for="author">Author</label>
-                    <input type="text" id="author" name="author" required>
-                    <span class="error" id="author-error"></span>
+                    <label class="form-label" for="author">Author</label>
+                    <input class="form-control" type="text" id="author" name="author" required>
+                    <span class="form-error" id="author-error"></span>
                 </div>
 
                 <div class="form-group">
-                    <label for="borrower">Borrower</label>
-                    <input type="text" id="borrower" name="borrower" required>
-                    <span class="error" id="borrower-error"></span>
+                    <label class="form-label" for="borrower">Borrower</label>
+                    <input class="form-control" type="text" id="borrower" name="borrower" required>
+                    <span class="form-error" id="borrower-error"></span>
                 </div>
 
                 <div class="form-group">
-                    <label for="due-date">Due date</label>
-                    <input type="date" id="due-date" name="due-date" required>
-                    <span class="error" id="due-date-error"></span>
+                    <label class="form-label" for="due-date">Due date</label>
+                    <input class="form-control" type="date" id="due-date" name="due-date" required>
+                    <span class="form-error" id="due-date-error"></span>
                 </div>
 
                 <div class="form-group">
-                    <label for="genre">Genre</label>
-                    <select id="genre" name="genre" required>
+                    <label class="form-label" for="genre">Genre</label>
+                    <select class="form-control" id="genre" name="genre" required>
                         <option value="">Select a genre</option>
                         <option value="Fiction">Fiction</option>
                         <option value="Science">Science</option>
                         <option value="History">History</option>
                         <option value="Technology">Technology</option>
                     </select>
-                    <span class="error" id="genre-error"></span>
+                    <span class="form-error" id="genre-error"></span>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Add loan</button>
@@ -63,21 +61,21 @@
         </section>
 
         <section class="card">
-            <h2>Lent books</h2>
+            <h2 class="card-title">Lent books</h2>
 
-            <div class="summary" id="summary">
-                <div class="summary-box">
-                    <span class="summary-label">Total loans</span>
-                    <span class="summary-value" id="total-loans">0</span>
+            <div class="stats" id="summary">
+                <div class="stat">
+                    <span class="stat-label">Total loans</span>
+                    <span class="stat-value" id="total-loans">0</span>
                 </div>
-                <div class="summary-box">
-                    <span class="summary-label">Overdue loans</span>
-                    <span class="summary-value summary-overdue" id="overdue-loans">0</span>
+                <div class="stat">
+                    <span class="stat-label">Overdue loans</span>
+                    <span class="stat-value text-danger" id="overdue-loans">0</span>
                 </div>
             </div>
 
-            <div class="table-wrapper">
-                <table>
+            <div class="table-responsive">
+                <table class="table">
                     <thead>
                         <tr>
                             <th>Title</th>
@@ -93,12 +91,12 @@
                 </table>
             </div>
 
-            <p class="empty-message" id="empty-message">No books lent yet.</p>
+            <p class="text-center text-muted" id="empty-message">No books lent yet.</p>
         </section>
 
     </main>
 
-    <footer class="site-footer">
+    <footer class="footer text-center text-muted">
         <p>Book Lending Tracker &copy; 2026</p>
     </footer>
 
