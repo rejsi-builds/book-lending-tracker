@@ -185,3 +185,42 @@ th {
 .hidden {
     display: none;
 }
+
+/* ----- summary ----- */
+
+.summary {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.summary-box {
+    flex: 1;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+}
+
+.summary-label {
+    display: block;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+}
+
+.summary-value {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.summary-overdue {
+    color: var(--color-late);
+}
+
+@media (max-width: 600px) {
+    .summary {
+        flex-direction: column;
+    }
+}

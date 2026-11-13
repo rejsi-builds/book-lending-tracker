@@ -59,6 +59,17 @@ const BookLibrary = {
         }
         return 'Lent';
     },
+
+    countOverdue: function () {
+        let loans = this.getLoans();
+        let count = 0;
+        loans.forEach((loan) => {
+            if (this.isOverdue(loan)) {
+                count++;
+            }
+        });
+        return count;
+    },
 };
 
 // ----- page code -----
@@ -66,6 +77,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let form = document.getElementById('lend-form');
     let tblBody = document.getElementById('loan-list');
+
+    // ----- summary -----
+    function showSummary() {
+        let loans = BookLibrary.getLoans();
+        document.getElementById('total-loans').textContent = loans.length;
+        document.getElementById('overdue-loans').textContent = BookLibrary.countOverdue();
+    }
 
     // ----- table -----
     function showTable() {
@@ -140,6 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function refresh() {
         showTable();
+        showSummary();
     }
 
     // ----- form submit -----
