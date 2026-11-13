@@ -114,6 +114,21 @@ body {
     background-color: var(--color-primary-dark);
 }
 
+/* ----- validation messages ----- */
+
+.form-group input.invalid,
+.form-group select.invalid {
+    border-color: var(--color-error);
+}
+
+.error {
+    display: block;
+    min-height: 18px;
+    margin-top: 2px;
+    font-size: 0.85rem;
+    color: var(--color-error);
+}
+
 /* ----- table ----- */
 
 .btn-small {
