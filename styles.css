@@ -114,3 +114,74 @@ body {
     background-color: var(--color-primary-dark);
 }
 
+/* ----- table ----- */
+
+.btn-small {
+    padding: 4px 10px;
+    font-size: 0.85rem;
+    margin-right: 6px;
+}
+
+.btn-return {
+    background-color: var(--color-ok);
+    color: #ffffff;
+}
+
+.btn-delete {
+    background-color: var(--color-late);
+    color: #ffffff;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+}
+
+th {
+    background-color: var(--color-background);
+}
+
+.status {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.status-lent {
+    background-color: var(--color-ok-bg);
+    color: var(--color-ok);
+}
+
+.status-overdue {
+    background-color: var(--color-late-bg);
+    color: var(--color-late);
+}
+
+.status-returned {
+    background-color: var(--color-done-bg);
+    color: var(--color-done);
+}
+
+.empty-message {
+    text-align: center;
+    color: var(--color-muted);
+    margin: 16px 0 0 0;
+}
+
+.hidden {
+    display: none;
+}
