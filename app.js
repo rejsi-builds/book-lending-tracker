@@ -78,6 +78,48 @@ document.addEventListener('DOMContentLoaded', () => {
     let form = document.getElementById('lend-form');
     let tblBody = document.getElementById('loan-list');
 
+    // ----- validation -----
+    function showError(fieldId, message) {
+        document.getElementById(fieldId).classList.add('invalid');
+        document.getElementById(fieldId + '-error').textContent = message;
+    }
+
+    function clearErrors() {
+        let fieldIds = ['title', 'author', 'borrower', 'due-date', 'genre'];
+        fieldIds.forEach((fieldId) => {
+            document.getElementById(fieldId).classList.remove('invalid');
+            document.getElementById(fieldId + '-error').textContent = '';
+        });
+    }
+
+    function validateForm() {
+        let valid = true;
+        clearErrors();
+
+        if (document.getElementById('title').value.trim() === '') {
+            showError('title', 'Please enter the book title.');
+            valid = false;
+        }
+        if (document.getElementById('author').value.trim() === '') {
+            showError('author', 'Please enter the author.');
+            valid = false;
+        }
+        if (document.getElementById('borrower').value.trim() === '') {
+            showError('borrower', 'Please enter who borrowed the book.');
+            valid = false;
+        }
+        if (document.getElementById('due-date').value === '') {
+            showError('due-date', 'Please choose a due date.');
+            valid = false;
+        }
+        if (document.getElementById('genre').value === '') {
+            showError('genre', 'Please select a genre.');
+            valid = false;
+        }
+
+        return valid;
+    }
+
     // ----- summary -----
     function showSummary() {
         let loans = BookLibrary.getLoans();
@@ -164,6 +206,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----- form submit -----
     form.addEventListener('submit', (event) => {
         event.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
 
         let loan = {
             title: document.getElementById('title').value.trim(),
