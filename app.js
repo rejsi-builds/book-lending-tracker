@@ -1,130 +1,113 @@
-// Page code for Book Lending Tracker
-// Uses the BookLibrary object from library.js (loaded before this file).
+// Book Lending Tracker (app)
+// Everything specific to books and loans lives here.
+// The generic tools (storage, validation, dates, DOM helper) come from library.js (Lib).
 
-// page code
 document.addEventListener('DOMContentLoaded', () => {
 
-    let form = document.getElementById('lend-form');
-    let tblBody = document.getElementById('loan-list');
+    const loanStore = Lib.createStore('lentBooks');
 
-    // validation 
-    function showError(fieldId, message) {
-        document.getElementById(fieldId).classList.add('invalid');
-        document.getElementById(fieldId + '-error').textContent = message;
+    // the required form fields: the loan property, the input id, and the error message
+    const fields = [
+        { key: 'title', id: 'title', message: 'Please enter the book title.' },
+        { key: 'author', id: 'author', message: 'Please enter the author.' },
+        { key: 'borrower', id: 'borrower', message: 'Please enter who borrowed the book.' },
+        { key: 'dueDate', id: 'due-date', message: 'Please choose a due date.' },
+        { key: 'genre', id: 'genre', message: 'Please select a genre.' }
+    ];
+
+    // loan rules
+    function isOverdue(loan) {
+        return !loan.returned && loan.dueDate < Lib.today();
     }
 
+    function getStatus(loan) {
+        if (loan.returned) {
+            return 'Returned';
+        }
+        if (isOverdue(loan)) {
+            return 'Overdue';
+        }
+        return 'Lent';
+    }
+
+    // which badge style from the CSS library goes with which status
+    const badgeForStatus = {
+        'Lent': 'badge badge-success',
+        'Overdue': 'badge badge-danger',
+        'Returned': 'badge badge-muted'
+    };
+
+    // form errors
     function clearErrors() {
-        let fieldIds = ['title', 'author', 'borrower', 'due-date', 'genre'];
-        fieldIds.forEach((fieldId) => {
-            document.getElementById(fieldId).classList.remove('invalid');
-            document.getElementById(fieldId + '-error').textContent = '';
+        fields.forEach((field) => {
+            document.getElementById(field.id).classList.remove('is-invalid');
+            document.getElementById(field.id + '-error').textContent = '';
         });
     }
 
-    function validateForm() {
-        let valid = true;
-        clearErrors();
-
-        if (document.getElementById('title').value.trim() === '') {
-            showError('title', 'Please enter the book title.');
-            valid = false;
-        }
-        if (document.getElementById('author').value.trim() === '') {
-            showError('author', 'Please enter the author.');
-            valid = false;
-        }
-        if (document.getElementById('borrower').value.trim() === '') {
-            showError('borrower', 'Please enter who borrowed the book.');
-            valid = false;
-        }
-        if (document.getElementById('due-date').value === '') {
-            showError('due-date', 'Please choose a due date.');
-            valid = false;
-        }
-        if (document.getElementById('genre').value === '') {
-            showError('genre', 'Please select a genre.');
-            valid = false;
-        }
-
-        return valid;
+    function showErrors(errors) {
+        fields.forEach((field) => {
+            if (errors[field.key]) {
+                document.getElementById(field.id).classList.add('is-invalid');
+                document.getElementById(field.id + '-error').textContent = errors[field.key];
+            }
+        });
     }
 
     // summary
     function showSummary() {
-        let loans = BookLibrary.getLoans();
+        let loans = loanStore.all();
+        let overdue = loans.filter(isOverdue).length;
         document.getElementById('total-loans').textContent = loans.length;
-        document.getElementById('overdue-loans').textContent = BookLibrary.countOverdue();
+        document.getElementById('overdue-loans').textContent = overdue;
     }
 
-    // table
-    function showTable() {
-        let loans = BookLibrary.getLoans();
-        tblBody.innerHTML = '';
+    //table
+    function buildRow(loan) {
+        let status = getStatus(loan);
+        let actions = [];
 
-        loans.forEach((loan, index) => {
-            let tblRow = document.createElement('tr');
-
-            let titleTd = document.createElement('td');
-            titleTd.textContent = loan.title;
-
-            let authorTd = document.createElement('td');
-            authorTd.textContent = loan.author;
-
-            let borrowerTd = document.createElement('td');
-            borrowerTd.textContent = loan.borrower;
-
-            let dueDateTd = document.createElement('td');
-            dueDateTd.textContent = loan.dueDate;
-
-            let genreTd = document.createElement('td');
-            genreTd.textContent = loan.genre;
-
-            let statusTd = document.createElement('td');
-            let status = BookLibrary.getStatus(loan);
-            let statusSpan = document.createElement('span');
-            statusSpan.className = 'status status-' + status.toLowerCase();
-            statusSpan.textContent = status;
-            statusTd.appendChild(statusSpan);
-
-            let actionTd = document.createElement('td');
-
-            if (!loan.returned) {
-                let returnBtn = document.createElement('button');
-                returnBtn.className = 'btn btn-small btn-return';
-                returnBtn.textContent = 'Return';
-                returnBtn.addEventListener('click', () => {
-                    BookLibrary.markReturned(index);
+        if (!loan.returned) {
+            actions.push(Lib.el('button', {
+                className: 'btn btn-success btn-sm',
+                text: 'Return',
+                onClick: () => {
+                    loanStore.update(loan.id, { returned: true });
                     refresh();
-                });
-                actionTd.appendChild(returnBtn);
-            }
+                }
+            }));
+        }
 
-            let deleteBtn = document.createElement('button');
-            deleteBtn.className = 'btn btn-small btn-delete';
-            deleteBtn.textContent = 'Delete';
-            deleteBtn.addEventListener('click', () => {
-                BookLibrary.deleteLoan(index);
+        actions.push(Lib.el('button', {
+            className: 'btn btn-danger btn-sm',
+            text: 'Delete',
+            onClick: () => {
+                loanStore.remove(loan.id);
                 refresh();
-            });
-            actionTd.appendChild(deleteBtn);
+            }
+        }));
 
-            tblRow.appendChild(titleTd);
-            tblRow.appendChild(authorTd);
-            tblRow.appendChild(borrowerTd);
-            tblRow.appendChild(dueDateTd);
-            tblRow.appendChild(genreTd);
-            tblRow.appendChild(statusTd);
-            tblRow.appendChild(actionTd);
+        return Lib.el('tr', {}, [
+            Lib.el('td', { text: loan.title }),
+            Lib.el('td', { text: loan.author }),
+            Lib.el('td', { text: loan.borrower }),
+            Lib.el('td', { text: loan.dueDate }),
+            Lib.el('td', { text: loan.genre }),
+            Lib.el('td', {}, [Lib.el('span', { className: badgeForStatus[status], text: status })]),
+            Lib.el('td', {}, actions)
+        ]);
+    }
 
-            tblBody.appendChild(tblRow);
+    function showTable() {
+        let loans = loanStore.all();
+        let tableBody = document.getElementById('loan-list');
+        tableBody.innerHTML = '';
+
+        loans.forEach((loan) => {
+            tableBody.appendChild(buildRow(loan));
         });
 
-        let emptyMessage = document.getElementById('empty-message');
-        if (loans.length === 0) {
-            emptyMessage.classList.remove('hidden');
-        } else {
-            emptyMessage.classList.add('hidden');
-        }
+        document.getElementById('empty-message').classList.toggle('hidden', loans.length > 0);
     }
 
     function refresh() {
@@ -133,23 +116,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // form submit
+    let form = document.getElementById('lend-form');
+
     form.addEventListener('submit', (event) => {
         event.preventDefault();
 
-        if (!validateForm()) {
+        let values = {};
+        let rules = {};
+        fields.forEach((field) => {
+            values[field.key] = document.getElementById(field.id).value.trim();
+            rules[field.key] = field.message;
+        });
+
+        clearErrors();
+        let errors = Lib.validate(values, rules);
+
+        if (Object.keys(errors).length > 0) {
+            showErrors(errors);
             return;
         }
 
-        let loan = {
-            title: document.getElementById('title').value.trim(),
-            author: document.getElementById('author').value.trim(),
-            borrower: document.getElementById('borrower').value.trim(),
-            dueDate: document.getElementById('due-date').value,
-            genre: document.getElementById('genre').value,
-            returned: false
-        };
-
-        BookLibrary.addLoan(loan);
+        values.returned = false;
+        loanStore.add(values);
         form.reset();
         refresh();
     });
